@@ -2,6 +2,7 @@ import asyncio
 import os
 import numpy as np
 import utility_functions as func
+import cv2
 
 
 class Image:
@@ -59,7 +60,10 @@ class Sequential:
         return image
 
 
-def draw_bounding_boxes(path: str, bounding_boxes: np.ndarray, classes: dict):
-    print(path)
-    print(bounding_boxes)
-    print(classes)
+def draw_bounding_boxes(line_weight: int, path: str, bounding_boxes: np.ndarray) -> np.ndarray:
+    image = cv2.imread(path)
+    width, height, _ = np.shape(image)
+
+    # image = cv2.line(image, pt4, pt1, (0, 0, 0), line_weight)
+
+    return image
