@@ -1,8 +1,6 @@
 import asyncio
 import os
-
 import numpy as np
-import cv2
 import utility_functions as func
 
 
@@ -12,7 +10,7 @@ class Image:
     b_boxes: np.ndarray
     directory: str
 
-    def __init__(self, current_paths: np.ndarray, new_paths: np.ndarray, bb: np.ndarray, directory:str):
+    def __init__(self, current_paths: np.ndarray, new_paths: np.ndarray, bb: np.ndarray, directory: str):
         self.current_paths = current_paths
         self.new_paths = new_paths
         self.b_boxes = bb
@@ -43,18 +41,25 @@ class Sequential:
     def __init__(self, operations: list):
         self.operations = operations
 
+    def append(self, operations: list):
+        for operation in operations:
+            self.operations.append(operation)
+
     def process(self, data: Image):
         images = asyncio.run(func.read_paths(data.current_paths))
 
-        for operation in self.operations:
-            pass
+        images = await asyncio.gather(*[self.sequential(image) for image in images])
 
         os.chdir(f"{data.directory}")
-        asyncio.run(func.write_paths(data.new_paths))
+        asyncio.run(func.write_paths(images, data.new_paths))
 
     async def sequential(self, image: np.ndarray) -> np.ndarrray:
-        pass
+        for operation in self.operations:
+            image = operation[0](image=image, *operation[1])
+        return image
 
 
-def draw_bounding_boxes(path: str, bounding_boxes: np.ndarray):
-     pass
+def draw_bounding_boxes(path: str, bounding_boxes: np.ndarray, classes: dict):
+    print(path)
+    print(bounding_boxes)
+    print(classes)

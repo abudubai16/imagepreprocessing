@@ -19,3 +19,7 @@ def blur(blur_type=cv2.GaussianBlur, *kwargs):
 
 def filter_kernal(func=cv2.filter2D, *kwargs):
     return func, kwargs
+
+
+def custom_function(func, *kwargs):
+    return func, kwargs
