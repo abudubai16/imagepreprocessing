@@ -55,7 +55,7 @@ class Sequential:
         os.chdir(f"{data.directory}")
         asyncio.run(func.write_paths(images, data.new_paths))
 
-    async def sequential(self, image: np.ndarray) -> np.ndarrray:
+    async def sequential(self, image: np.ndarray) -> np.ndarray:
         for operation in self.operations:
             image = operation[0](image=image, *operation[1])
         return image
