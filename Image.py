@@ -2,7 +2,6 @@ import asyncio
 import os
 import numpy as np
 import utility_functions as func
-import cv2
 
 
 class Image:
