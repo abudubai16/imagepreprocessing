@@ -58,12 +58,3 @@ class Sequential:
         for operation in self.operations:
             image = operation[0](image=image, *operation[1])
         return image
-
-
-def draw_bounding_boxes(line_weight: int, path: str, bounding_boxes: np.ndarray) -> np.ndarray:
-    image = cv2.imread(path)
-    width, height, _ = np.shape(image)
-
-    # image = cv2.line(image, pt4, pt1, (0, 0, 0), line_weight)
-
-    return image
