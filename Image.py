@@ -45,11 +45,13 @@ class Sequential:
         for operation in operations:
             self.operations.append(operation)
 
+    async def run_process(self, images: np.ndarray) -> tuple:
+        images = await asyncio.gather(*[self.sequential(image) for image in images])
+        return images
+
     def process(self, data: Image):
         images = asyncio.run(func.read_paths(data.current_paths))
-
-        images = await asyncio.gather(*[self.sequential(image) for image in images])
-
+        images = await asyncio.run(self.run_process(images=images))
         os.chdir(f"{data.directory}")
         asyncio.run(func.write_paths(images, data.new_paths))
 
