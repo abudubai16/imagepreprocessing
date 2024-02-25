@@ -2,6 +2,8 @@ import asyncio
 import cv2
 import numpy as np
 
+# google colab has 2 threads, should be good enough for our purpose
+
 
 async def read_path(path: str) -> np.ndarray:
     img = await cv2.imread(path)
