@@ -2,8 +2,6 @@ import asyncio
 import cv2
 import numpy as np
 
-# google colab has 2 threads, should be good enough for our purpose
-
 
 async def read_path(path: str) -> np.ndarray:
     img = await cv2.imread(path)
@@ -11,15 +9,15 @@ async def read_path(path: str) -> np.ndarray:
 
 
 async def read_paths(paths: np.ndarray) -> np.ndarray:
-    images = await asyncio.gather(*[read_path(path) for path in paths])
+    images = np.array(await asyncio.gather(*[read_path(path) for path in paths]))
     return images
 
 
-async def write_path(image: np.ndarray, path: str):
+async def write_path(image: np.ndarray, path: str) -> None:
     cv2.imwrite(path, image)
 
 
-async def write_paths(images: np.ndarray, paths: np.ndarray):
+async def write_paths(images: np.ndarray, paths: np.ndarray) -> None:
     tasks = [asyncio.create_task(write_path(image=images[i], path=paths[i])) for i in range(len(images))]
     tasks = [await task for task in tasks]
 
