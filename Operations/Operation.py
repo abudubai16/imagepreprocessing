@@ -1,14 +1,10 @@
 import cv2
 import numpy as np
-
+import operationerrors
 # have to run the run functions using multiprocessing for faster processing
 
 
 class Resize:
-    fx: float
-    fy: float
-    dsize: tuple[int]
-    interpolation: int
 
     def __init__(self, fx: float, fy: float, dsize: tuple[int] = (256, 256), interpolation: int = cv2.INTER_AREA):
         self.dsize = dsize
@@ -22,9 +18,6 @@ class Resize:
 
 
 class Color:
-    code: int
-    dst: int
-    dstCn: int
 
     def __init__(self, code: int, dst: int, dstCn: int):
         self.code = code
@@ -46,9 +39,6 @@ class Normalize:
 
 
 class Blur:
-    blurType: int
-    borderType: int
-    blur_functions: list
 
     def __init__(self, blur_type: int, borderType: int = cv2.BORDER_DEFAULT):
         self.blurType = blur_type
@@ -61,7 +51,18 @@ class Blur:
             ]
 
     def run(self, images: np.ndarray) -> np.ndarray[np.ndarray]:
-        images = self.blur_functions[self.blurType](images)
+        if self.blurType == 0:
+            images = self.box_filter(images=images)
+        elif self.blurType == 1:
+            images = self.gaussian_blur(images=images)
+        elif self.blurType == 2:
+            images = self.simple_blur(images=images)
+        elif self.blurType == 3:
+            images = self.median_blur(images=images)
+        elif self.blurType == 4:
+            images = self.bilateral_blur(images=images)
+        else:
+            raise ValueError
         return images
 
     def gaussian_blur(self, images: np.ndarray) -> np.ndarray[np.ndarray]:
@@ -86,10 +87,6 @@ class Blur:
 
 
 class Filter2d:
-    ddpth: int
-    kernal: np.ndarray
-    delta: float
-    borderType: int
 
     def __init__(self, ddpth: int, kernal: np.ndarray, delta: float = 0, borderType: int = cv2.BORDER_DEFAULT):
         self.ddpth = ddpth
