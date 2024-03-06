@@ -40,7 +40,8 @@ def create_points(bounding_boxes: np.ndarray, bb_format: str) -> list:
         pass
 
     for i in range(num_points):
-        points.append([[(bounding_boxes[i % num_points], bounding_boxes[(i + 1) % num_points])] for i in range(num_points)])
+        points.append([[(bounding_boxes[i % num_points],
+                         bounding_boxes[(i + 1) % num_points])] for i in range(num_points)])
 
     points = np.concatenate(tuple(points), axis=1)
     return points
