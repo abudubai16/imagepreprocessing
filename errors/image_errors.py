@@ -1,0 +1,2 @@
+class DirectoryNotSame(Exception):
+    pass

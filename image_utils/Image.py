@@ -1,15 +1,11 @@
-import asyncio
 import os
 import numpy as np
-import utility_functions as func
+from errors import image_errors
+import concurrent.futures
+from multiprocessing import cpu_count
 
 
 class Image:
-    current_paths: np.ndarray
-    new_paths: np.ndarray
-    b_boxes: np.ndarray
-    directory: str
-
     def __init__(self, current_paths: np.ndarray, new_paths: np.ndarray, bb: np.ndarray, directory: str):
         self.current_paths = current_paths
         self.new_paths = new_paths
@@ -20,6 +16,8 @@ class Image:
         self.images = np.concatenate(self.images, other.images, axis=1)
         self.b_boxes = np.concatenate(self.b_boxes, other.b_boxes, axis=1)
         self.new_paths = np.concatenate(self.new_paths, other.new_paths, axis=1)
+        if self.directory != other.directory:
+            raise image_errors.DirectoryNotSame
         return self
 
     def __repr__(self):
@@ -35,27 +33,31 @@ class Image:
 
 
 class Sequential:
-    operations: list
-    images: np.ndarray
-
     def __init__(self, operations: list):
         self.operations = operations
+        self.cpu_count = cpu_count()
 
     def append(self, operations: list):
         for operation in operations:
             self.operations.append(operation)
 
-    async def run_process(self, images: np.ndarray) -> tuple:
-        images = await asyncio.gather(*[self.sequential(image) for image in images])
-        return images
+    def process(self, data: Image,  chunksize: int = 1, max_workers: int = cpu_count()):
 
-    def process(self, data: Image):
-        images = asyncio.run(func.read_paths(data.current_paths))
-        images = asyncio.run(self.run_process(images=images))
-        os.chdir(f"{data.directory}")
-        asyncio.run(func.write_paths(images, data.new_paths))
+        if not chunksize:
+            chunksize = int(max(len(data.current_paths)/100, 1))
 
-    async def sequential(self, image: np.ndarray) -> np.ndarray:
-        for operation in self.operations:
-            image = operation[0](image=image, *operation[1])
-        return image
+        os.chdir(data.directory)
+        os.mkdir(f"{data.directory}/processed_images")
+
+        with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as Executor:
+            executed = Executor.map(self.run_sequential, data.current_paths, chunksize=chunksize)
+            processed = np.sum([1 for _ in executed])
+            print(f"For {len(data.current_paths)} images, {processed} images were processed\n")
+
+    def run_sequential(self, data) -> bool:
+        try:
+
+            return False
+        except Exception as e:
+            print(f"There was an error raised in the following file:")
+            return True

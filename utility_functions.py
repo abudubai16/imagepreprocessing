@@ -1,25 +1,7 @@
 import asyncio
+import os
 import cv2
 import numpy as np
-
-
-async def read_path(path: str) -> np.ndarray:
-    img = await cv2.imread(path)
-    return img
-
-
-async def read_paths(paths: np.ndarray) -> np.ndarray:
-    images = np.array(await asyncio.gather(*[read_path(path) for path in paths]))
-    return images
-
-
-async def write_path(image: np.ndarray, path: str) -> None:
-    cv2.imwrite(path, image)
-
-
-async def write_paths(images: np.ndarray, paths: np.ndarray) -> None:
-    tasks = [asyncio.create_task(write_path(image=images[i], path=paths[i])) for i in range(len(images))]
-    tasks = [await task for task in tasks]
 
 
 def create_points(bounding_boxes: np.ndarray, bb_format: str) -> list:
