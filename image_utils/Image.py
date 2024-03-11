@@ -3,21 +3,23 @@ import numpy as np
 from errors import image_errors
 import concurrent.futures
 from multiprocessing import cpu_count
+import Operations
+import cv2
 
 
 class Image:
-    def __init__(self, current_paths: np.ndarray, new_paths: np.ndarray, bb: np.ndarray, directory: str):
+    def __init__(self, current_paths: np.ndarray, bb: np.ndarray | None, directory: str):
         self.current_paths = current_paths
-        self.new_paths = new_paths
         self.b_boxes = bb
         self.directory = directory
 
     def __add__(self, other):
         self.images = np.concatenate(self.images, other.images, axis=1)
         self.b_boxes = np.concatenate(self.b_boxes, other.b_boxes, axis=1)
-        self.new_paths = np.concatenate(self.new_paths, other.new_paths, axis=1)
+
         if self.directory != other.directory:
             raise image_errors.DirectoryNotSame
+
         return self
 
     def __repr__(self):
@@ -35,7 +37,6 @@ class Image:
 class Sequential:
     def __init__(self, operations: list):
         self.operations = operations
-        self.cpu_count = cpu_count()
 
     def append(self, operations: list):
         for operation in operations:
@@ -43,7 +44,7 @@ class Sequential:
 
     def process(self, data: Image,  chunksize: int = 1, max_workers: int = cpu_count()):
 
-        if not chunksize:
+        if chunksize == 1:
             chunksize = int(max(len(data.current_paths)/100, 1))
 
         os.chdir(data.directory)
@@ -51,13 +52,26 @@ class Sequential:
 
         with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as Executor:
             executed = Executor.map(self.run_sequential, data.current_paths, chunksize=chunksize)
-            processed = np.sum([1 for _ in executed])
-            print(f"For {len(data.current_paths)} images, {processed} images were processed\n")
+            processed_img = np.sum([1 for _ in executed])
 
-    def run_sequential(self, data) -> bool:
+            print(f"For {len(data.current_paths)} images, {processed_img} images were processed\n")
+
+    def run_sequential(self, img_path, bb: np.ndarray | None) -> bool:
         try:
+            cwd = os.getcwd()
 
-            return False
+            img = cv2.imread(f"{cwd}/{img_path}")
+
+            for img_operation in self.operations:
+
+                if img_operation == Operations.Resize:
+                    img, bb = img_operation.run(img, bb)
+                else:
+                    img = img_operation.run(img)
+
+            image_processed = cv2.imwrite(f"{cwd}/processed_images/{img_path}", img)
+
+            return image_processed
         except Exception as e:
-            print(f"There was an error raised in the following file:")
-            return True
+            print(f"There was an error raised in the following file: {img_path}, with the following error: {e}")
+            return False

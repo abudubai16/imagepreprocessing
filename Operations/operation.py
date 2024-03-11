@@ -2,9 +2,6 @@ import cv2
 import numpy as np
 
 
-# have to run the run functions using multiprocessing for faster processing
-
-
 class Resize:
 
     def __init__(self, fx: float, fy: float, dsize: tuple[int] = (256, 256), interpolation: int = cv2.INTER_AREA):
@@ -25,8 +22,8 @@ class Color:
         self.dst = dst
         self.dstCn = dstCn
 
-    def run(self, images: np.ndarray) -> np.ndarray[np.ndarray]:
-        func = cv2.cvtColor
+    def run(self, images: np.ndarray) -> np.ndarray:
+        images = cv2.cvtColor(code=self.code, dst=self.dst)
         return images
 
 
