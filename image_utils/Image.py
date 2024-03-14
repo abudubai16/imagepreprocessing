@@ -1,6 +1,5 @@
 import os
 import numpy as np
-from errors import image_errors
 import concurrent.futures
 from multiprocessing import cpu_count
 import Operations
@@ -18,7 +17,8 @@ class Image:
         self.b_boxes = np.concatenate(self.b_boxes, other.b_boxes, axis=1)
 
         if self.directory != other.directory:
-            raise image_errors.DirectoryNotSame
+            pass
+            # raise image_errors.DirectoryNotSame
 
         return self
 
