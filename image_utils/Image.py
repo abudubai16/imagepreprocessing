@@ -3,10 +3,12 @@ import numpy as np
 import concurrent.futures
 from multiprocessing import cpu_count
 import cv2
+import Operations
+from errors import image_errors
 
 
 class Image:
-    def __init__(self, current_paths: np.ndarray, bb: np.ndarray | None, directory: str):
+    def __init__(self, current_paths: np.ndarray, directory: str, bb: np.ndarray | None = None):
         self.current_paths = current_paths
         self.b_boxes = bb
         self.directory = directory
@@ -16,8 +18,7 @@ class Image:
         self.b_boxes = np.concatenate(self.b_boxes, other.b_boxes, axis=1)
 
         if self.directory != other.directory:
-            pass
-            # raise image_errors.DirectoryNotSame
+            raise image_errors.DirectoryNotSame
 
         return self
 
