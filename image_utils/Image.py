@@ -23,7 +23,7 @@ class Image:
         return self
 
     def __repr__(self):
-        if len(self.current_paths)>= 5:
+        if np.shape(self.current_paths)[0] >= 5:
             st = f"Number of images:{len(self.current_paths)}\nThe first 5 paths are:"
             for i in range(5):
                 st = st + f"\n{self.current_paths[i]}"
