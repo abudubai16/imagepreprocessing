@@ -2,7 +2,6 @@ import os
 import numpy as np
 import concurrent.futures
 from multiprocessing import cpu_count
-import Operations
 import cv2
 
 
