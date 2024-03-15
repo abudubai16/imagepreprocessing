@@ -1,4 +1,4 @@
-import operation
+import operation, types
 
 from operation import (
     Resize,
