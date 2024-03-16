@@ -1,7 +1,5 @@
 from .. import Operations, errors
-from . import Image
-
-from Image import (
+from .Image import (
     Image,
     Sequential
 )
