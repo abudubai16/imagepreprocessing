@@ -1,4 +1,4 @@
-import operation, types
+from . import operation, operations_type
 
 from operation import (
     Resize,
