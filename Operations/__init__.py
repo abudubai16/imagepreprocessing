@@ -1,5 +1,5 @@
-import operations_type
-from operation import (
+from . import operations_type
+from .operation import (
     Resize,
     Color,
     Normalize,

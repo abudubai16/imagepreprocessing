@@ -1,1 +1,1 @@
-from ImgData.Image import Image, Sequential
+from .Image import Image, Sequential

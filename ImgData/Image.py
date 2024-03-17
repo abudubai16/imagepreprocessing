@@ -1,14 +1,16 @@
-import os
-import numpy as np
 import concurrent.futures
+import os
 from multiprocessing import cpu_count
+
 import cv2
-import Operations
-from errors import image_errors
+import numpy as np
+
+from ..errors import image_errors
+from .. import Operations
 
 
 class Image:
-    def __init__(self, current_paths: np.ndarray, directory: str, bb: np.ndarray | None = None):
+    def __init__(self, current_paths: np.ndarray, directory: str, bb: np.ndarray = np.zeroes()):
         self.current_paths = current_paths
         self.b_boxes = bb
         self.directory = directory
@@ -48,7 +50,9 @@ class Sequential:
             chunksize = int(max(len(data.current_paths)/100, 1))
 
         os.chdir(data.directory)
-        os.mkdir(f"{data.directory}/processed_images")
+        processed_path = f"{data.directory}/processed_images"
+        if not os.path.exists(processed_path):
+            os.mkdir(processed_path)
 
         with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as Executor:
             executed = Executor.map(self.run_sequential, data.current_paths, chunksize=chunksize)
@@ -56,11 +60,12 @@ class Sequential:
 
             print(f"For {len(data.current_paths)} images, {processed_img} images were processed\n")
 
-    def run_sequential(self, img_path, bb: np.ndarray | None) -> bool:
+    def run_sequential(self, img_path: str) -> bool:
         try:
+            bb = None
             cwd = os.getcwd()
 
-            img = cv2.imread(f"{cwd}/{img_path}")
+            img = cv2.imread(f"{cwd}/{img_path}.png")
 
             for img_operation in self.operations:
 
