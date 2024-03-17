@@ -10,7 +10,7 @@ from .. import Operations
 
 
 class Image:
-    def __init__(self, current_paths: np.ndarray, directory: str, bb: np.ndarray = np.zeroes()):
+    def __init__(self, current_paths: np.ndarray, directory: str, bb: np.ndarray = np.zeros()):
         self.current_paths = current_paths
         self.b_boxes = bb
         self.directory = directory
@@ -72,11 +72,12 @@ class Sequential:
                 if img_operation == Operations.Resize:
                     img, bb = img_operation.run(img, bb)
                 else:
+
                     img = img_operation.run(img)
 
-            image_processed = cv2.imwrite(f"{cwd}/processed_images/{img_path}", img)
+            cv2.imwrite(f"{cwd}/processed_images/{img_path}", img)
 
-            return image_processed
+            return True
         except Exception as e:
-            print(f"There was an error raised in the following file: {img_path}, with the following error: {e}")
+            print(f"File: {img_path}, Error: {e}")
             return False
