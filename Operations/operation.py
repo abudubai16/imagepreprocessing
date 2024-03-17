@@ -21,10 +21,7 @@ class Color:
         self.code = code
 
     def run(self, image: np.ndarray) -> np.ndarray:
-        try:
-            image = cv2.cvtColor(image, code=self.code)
-        except IndexError:
-            print("IndexError")
+        image = cv2.cvtColor(image, code=self.code)
         return image
 
 
