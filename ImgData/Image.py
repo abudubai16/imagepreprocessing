@@ -70,12 +70,10 @@ class Sequential:
                 if img_operation == Operations.Resize:
                     img, bb = img_operation.run(img, bb)
                 else:
-                    print(1)
                     img = img_operation.run(img)
-                    print(2)
             cv2.imwrite(f"{cwd}/processed_images/{img_path}", img)
 
             return True
-        except Exception as e:
-            print(f"File: {img_path}, Error: {e}")
+        except TypeError:
+            print(f"File: {img_path}, Error: {TypeError}")
             return False
