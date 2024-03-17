@@ -57,7 +57,6 @@ class Sequential:
         with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as Executor:
             executed = Executor.map(self.run_sequential, data.current_paths, chunksize=chunksize)
 
-        print('Hello')
         processed_img = int(np.sum([1 for _ in executed if _]))
         print(f"For {len(data.current_paths)} images, {processed_img} images were processed\n")
 
@@ -65,13 +64,13 @@ class Sequential:
         try:
             bb = None
             cwd = os.getcwd()
-            img = cv2.imread(f"{cwd}/{img_path}.png")
+            img = cv2.imread(f"{cwd}/{img_path}.JPG")
             for img_operation in self.operations:
 
                 if img_operation == Operations.Resize:
                     img, bb = img_operation.run(img, bb)
                 else:
-                    print('That')
+                    print(np.shape(img))
                     img = img_operation.run(img)
             cv2.imwrite(f"{cwd}/processed_images/{img_path}", img)
 
