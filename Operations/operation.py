@@ -21,7 +21,9 @@ class Color:
         self.code = code
 
     def run(self, image: np.ndarray) -> np.ndarray:
+        print(3)
         image = cv2.cvtColor(image, code=self.code)
+        print(4)
         return image
 
 
