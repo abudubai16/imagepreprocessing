@@ -10,7 +10,7 @@ from .. import Operations
 
 
 class Image:
-    def __init__(self, current_paths: np.ndarray, directory: str, bb: np.ndarray = np.zeros()):
+    def __init__(self, current_paths: np.ndarray, directory: str, bb: np.ndarray = None):
         self.current_paths = current_paths
         self.b_boxes = bb
         self.directory = directory
@@ -56,7 +56,7 @@ class Sequential:
 
         with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as Executor:
             executed = Executor.map(self.run_sequential, data.current_paths, chunksize=chunksize)
-            processed_img = np.sum([1 for _ in executed])
+            processed_img = np.sum([1 for _ in executed if _])
 
             print(f"For {len(data.current_paths)} images, {processed_img} images were processed\n")
 
@@ -64,9 +64,9 @@ class Sequential:
         try:
             bb = None
             cwd = os.getcwd()
-
+            print(1)
             img = cv2.imread(f"{cwd}/{img_path}.png")
-
+            print(2)
             for img_operation in self.operations:
 
                 if img_operation == Operations.Resize:
@@ -74,7 +74,7 @@ class Sequential:
                 else:
 
                     img = img_operation.run(img)
-
+            print(3)
             cv2.imwrite(f"{cwd}/processed_images/{img_path}", img)
 
             return True
