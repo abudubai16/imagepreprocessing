@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="ImagePreprocessing",
+    name="imagepreprocessing",
     version="1.0",
     author="Abhyuday Chauhan",
     description="Personal project, will make changes as per use case",

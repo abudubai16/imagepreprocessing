@@ -1,5 +1,4 @@
-from . import operation, operations_type
-
+import operations_type
 from operation import (
     Resize,
     Color,
