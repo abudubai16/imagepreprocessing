@@ -56,9 +56,9 @@ class Sequential:
 
         with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as Executor:
             executed = Executor.map(self.run_sequential, data.current_paths, chunksize=chunksize)
-            processed_img = np.sum([1 for _ in executed if _])
 
-            print(f"For {len(data.current_paths)} images, {processed_img} images were processed\n")
+        processed_img = int(np.sum([1 for _ in executed if _]))
+        print(f"For {len(data.current_paths)} images, {processed_img} images were processed\n")
 
     def run_sequential(self, img_path: str) -> bool:
         try:
