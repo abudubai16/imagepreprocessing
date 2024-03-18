@@ -1,17 +1,23 @@
 import cv2
 import numpy as np
 
+from .. import utils
+
 
 class Resize:
-
     def __init__(self, fx: float, fy: float, dsize: tuple[int] = (256, 256), interpolation: int = cv2.INTER_AREA):
         self.dsize = dsize
         self.fx = fx
         self.fy = fy
         self.interpolation = interpolation
 
-    def run(self, image: np.ndarray, bounding_boxes: np.ndarray) -> np.ndarray:
-        # image = cv2.AsyncArray
+    def run(self, image: np.ndarray, bounding_boxes: np.ndarray | None) -> np.ndarray:
+        if bounding_boxes is None:
+            image = cv2.resize(image, dsize=self.dsize, fx=self.fx, fy=self.fy, interpolation=self.interpolation)
+        else:
+            size = np.shape(image)[:-1]
+            image = cv2.resize(image, dsize=self.dsize, fx=self.fx, fy=self.fy, interpolation=self.interpolation)
+            bounding_boxes = utils.resize_bb(new_size=self.dsize, bb=bounding_boxes, curr_size=size)
         return image, bounding_boxes
 
 
@@ -25,18 +31,14 @@ class Color:
         return image
 
 
-class Normalize:
+class Normalize:    # TODO Fix whatever error is being thrown here
     def __init__(self, alpha: float, beta: float, norm_type: int = cv2.NORM_MINMAX):
         self.norm_type = norm_type
         self.alpha = alpha
         self.beta = beta
 
     def run(self, image: np.ndarray) -> np.ndarray:
-        image = cv2.normalize(image,
-                              alpha=self.alpha,
-                              beta=self.beta,
-                              norm_type=self.norm_type
-                              )
+        # image = cv2.normalize(image, alpha=self.alpha, beta=self.beta, norm_type=self.norm_type)
         return image
 
 

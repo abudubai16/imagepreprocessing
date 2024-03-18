@@ -1,1 +1,2 @@
-from .Image import Image, Sequential
+from .image import Image
+from .sequential import Sequential

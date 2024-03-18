@@ -1,7 +1,15 @@
-import asyncio
-import os
 import cv2
 import numpy as np
+
+# TODO finish stuff here
+
+
+def get_chunksize(num_img: int, num_cores: int) -> int:
+    return num_img//num_cores
+
+
+def resize_bb(bb: np.ndarray, new_size: tuple, curr_size: tuple) -> np.ndarray:
+    return bb
 
 
 def create_points(bounding_boxes: np.ndarray, bb_format: str) -> list:
