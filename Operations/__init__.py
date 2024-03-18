@@ -4,5 +4,6 @@ from .operation import (
     Color,
     Normalize,
     Blur,
-    Filter2d
+    Filter2d,
+    HistEqualize
 )
