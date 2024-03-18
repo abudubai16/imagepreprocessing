@@ -56,6 +56,8 @@ class Sequential:
         if not os.path.exists(processed_path):
             os.mkdir(processed_path)
 
+        print(data.current_paths)
+
         with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as Executor:
             executed = Executor.map(self.run_sequential, data.current_paths, chunksize=chunksize)
 
@@ -63,6 +65,7 @@ class Sequential:
         print(f"For {len(data.current_paths)} images, {processed_img} images were processed\n")
 
     def run_sequential(self, img_path: str) -> bool:
+        print("Hello")
         try:
             bb = None
             print(f"{self.dir}/{img_path}")
