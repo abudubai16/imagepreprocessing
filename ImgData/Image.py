@@ -64,13 +64,12 @@ class Sequential:
         try:
             bb = None
             cwd = os.getcwd()
-            img = cv2.imread(f"{cwd}/{img_path}.JPG")
+            img = cv2.imread(f"{cwd}/{img_path}")
             for img_operation in self.operations:
 
                 if img_operation == Operations.Resize:
                     img, bb = img_operation.run(img, bb)
                 else:
-                    print(np.shape(img))
                     img = img_operation.run(img)
             cv2.imwrite(f"{cwd}/processed_images/{img_path}", img)
 

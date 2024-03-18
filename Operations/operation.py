@@ -11,7 +11,7 @@ class Resize:
         self.interpolation = interpolation
 
     def run(self, image: np.ndarray, bounding_boxes: np.ndarray) -> np.ndarray:
-        img_shape = np.shape(image)[:-1]
+        # image = cv2.AsyncArray
         return image, bounding_boxes
 
 
