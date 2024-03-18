@@ -48,7 +48,7 @@ class Sequential:
     def process(self, data: Image,  chunksize: int = 1, max_workers: int = cpu_count()):
 
         if chunksize == 1:
-            chunksize = int(max(len(data.current_paths)/100, 1))
+            chunksize = int(max(len(data.current_paths)/max_workers, 1))
 
         self.dir = data.directory
         os.chdir(self.dir)
