@@ -65,8 +65,9 @@ class Sequential:
     def run_sequential(self, img_path: str) -> bool:
         try:
             bb = None
-            img = cv2.imread(f"{self.dir}/{img_path}")
             print(f"{self.dir}/{img_path}")
+            img = cv2.imread(f"{self.dir}/{img_path}")
+
             for img_operation in self.operations:
 
                 if img_operation == Operations.Resize:
