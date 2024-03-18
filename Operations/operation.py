@@ -21,7 +21,6 @@ class Color:
         self.code = code
 
     def run(self, image: np.ndarray) -> np.ndarray:
-        print(np.shape(image))
         image = cv2.cvtColor(image, code=self.code)
         return image
 
@@ -163,3 +162,9 @@ class CustomFunc:
         image = self.func(image, *self.args, **self.kwargs)
         return image
 
+class HistEqualize:
+    def __init__(self):
+        pass
+    def run(self, image: np.ndarray) -> np.ndarray:
+        image = cv2.equalizeHist(image)
+        return image
