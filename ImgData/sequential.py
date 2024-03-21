@@ -13,9 +13,12 @@ from .. import Operations
 class Sequential:
     dir: str
     current_dir: str
+    operations: list
 
     def __init__(self, operations: list):
         self.operations = operations
+        self.dir = ""
+        self.current_dir = ""
 
     def append(self, operations: list):
         for operation in operations:
@@ -26,13 +29,12 @@ class Sequential:
         chunksize = utils.get_chunksize(len(data.img_id), max_workers) if chunksize == 1 else chunksize
 
         self.dir = data.directory
+        self.current_dir = os.getcwd()
+        os.chdir(self.dir)
 
         processed_path = f"{self.dir}/processed_images"
         if not os.path.exists(processed_path):
             os.mkdir(processed_path)
-
-        self.current_dir = os.getcwd()
-        os.chdir(self.dir)
 
         if data.b_boxes is None:
             arguments = np.array([(path, None) for _, path in enumerate(data.img_id)])
