@@ -25,11 +25,12 @@ class Sequential:
 
         chunksize = utils.get_chunksize(len(data.img_id), max_workers) if chunksize == 1 else chunksize
 
+        self.dir = data.directory
+
         processed_path = f"{self.dir}/processed_images"
         if not os.path.exists(processed_path):
             os.mkdir(processed_path)
 
-        self.dir = data.directory
         self.current_dir = os.getcwd()
         os.chdir(self.dir)
 
