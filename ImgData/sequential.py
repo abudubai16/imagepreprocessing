@@ -24,9 +24,9 @@ class Sequential:
         for operation in operations:
             self.operations.append(operation)
 
-    def process(self, data: Image,  chunksize: int = 1, max_workers: int = cpu_count()):
+    def process(self, data: Image,  chunksize: int = 0, max_workers: int = cpu_count()):
 
-        chunksize = utils.get_chunksize(len(data.img_id), max_workers) if chunksize == 1 else chunksize
+        chunksize = utils.get_chunksize(len(data.img_id), max_workers)
 
         self.new_dir = data.directory
         self.current_dir = os.getcwd()

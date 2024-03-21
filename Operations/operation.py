@@ -11,7 +11,7 @@ class Resize:
         self.fy = fy
         self.interpolation = interpolation
 
-    def run(self, image: np.ndarray, bounding_boxes: np.ndarray | None) -> np.ndarray:
+    def run(self, image: np.ndarray, bounding_boxes: np.ndarray) -> np.ndarray:
         if bounding_boxes is None:
             image = cv2.resize(image, dsize=self.dsize, fx=self.fx, fy=self.fy, interpolation=self.interpolation)
         else:
@@ -46,7 +46,7 @@ class Blur:
 
     def __init__(self,
                  blur_type: int,
-                 ksize: np.ndarray | None,
+                 ksize: np.ndarray,
                  ddepth: int = 3,
                  sigmaY: float = 0,
                  sigmaX: float = 1,

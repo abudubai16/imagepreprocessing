@@ -5,7 +5,11 @@ import numpy as np
 
 
 def get_chunksize(num_img: int, num_cores: int) -> int:
-    return num_img//num_cores
+    size = num_img//num_cores
+    if size == 0:
+        return 1
+    else:
+        return size
 
 
 def resize_bb(bb: np.ndarray, new_size: tuple, curr_size: tuple) -> np.ndarray:

@@ -5,7 +5,7 @@ from ..errors import image_errors
 
 
 class Image:
-    def __init__(self, img_id: np.ndarray | str, directory: str, **kwargs):
+    def __init__(self, img_id: np.ndarray, directory: str, **kwargs):
         self.img_id = img_id
         self.directory = directory
         self.b_boxes = None
