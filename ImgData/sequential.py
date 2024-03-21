@@ -11,13 +11,13 @@ from .. import Operations
 
 
 class Sequential:
-    dir: str
+    new_dir: str
     current_dir: str
     operations: list
 
     def __init__(self, operations: list):
         self.operations = operations
-        self.dir = ""
+        self.new_dir = ""
         self.current_dir = ""
 
     def append(self, operations: list):
@@ -28,11 +28,11 @@ class Sequential:
 
         chunksize = utils.get_chunksize(len(data.img_id), max_workers) if chunksize == 1 else chunksize
 
-        self.dir = data.directory
+        self.new_dir = data.directory
         self.current_dir = os.getcwd()
-        os.chdir(self.dir)
+        os.chdir(self.new_dir)
 
-        processed_path = f"{self.dir}/processed_images"
+        processed_path = f"{self.new_dir}/processed_images"
         if not os.path.exists(processed_path):
             os.mkdir(processed_path)
 
@@ -52,7 +52,7 @@ class Sequential:
         bb = inputs[1]
 
         try:
-            img = cv2.imread(f"{self.dir}/{img_path}")
+            img = cv2.imread(f"{self.new_dir}/{img_path}")
 
             for img_operation in self.operations:
                 if img_operation == Operations.Resize:
@@ -60,7 +60,7 @@ class Sequential:
                 else:
                     img = img_operation.run(img)
 
-            cv2.imwrite(f"{self.dir}/processed_images/{img_path}", img)
+            cv2.imwrite(f"{self.new_dir}/processed_images/{img_path}", img)
             return True
 
         except Exception as e:
