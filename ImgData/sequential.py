@@ -63,6 +63,6 @@ class Sequential:
             cv2.imwrite(f"{self.new_dir}/processed_images/{img_path}", img)
             return True
 
-        except Exception as e:
+        except ValueError as e:
             print(f"File: {inputs[0]}, Error: {e}")
             return False
