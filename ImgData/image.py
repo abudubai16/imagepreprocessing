@@ -1,4 +1,5 @@
 import os
+
 import numpy as np
 
 from ..errors import image_errors
@@ -7,14 +8,16 @@ from ..errors import image_errors
 class Image:
     def __init__(self, img_id: np.ndarray, directory: str, **kwargs):
         self.img_id = img_id
+
+        if not os.path.exists(directory):
+            raise NotADirectoryError
         self.directory = directory
+
         self.b_boxes = None
         if "bb" in kwargs:
             self.b_boxes = kwargs.get("bb")
 
-        if not os.path.exists(self.directory):
-            raise NotADirectoryError
-
+        pass
     def __add__(self, other):
         self.img_id = np.concatenate(self.img_id, other.img_id, axis=1)
         self.b_boxes = np.concatenate(self.b_boxes, other.b_boxes, axis=1)
